@@ -1,0 +1,49 @@
+function(pvec,p,title)
+{
+
+#Sort the p-values
+porder<-sort(pvec)
+
+#Get length 
+m<-length(porder)
+
+#Vector to hold the rejected p-values
+rejectedpvec<-NULL
+
+#Rejection Threshold
+T<-NULL
+
+#Max p-value order
+max<-NULL
+
+#Find the rejection threshold T, using the 'li' formula from the book
+for(i in 1:m){
+	##Goes through all the p-values and updates where the 'max' p-value is such that
+	##porder[i]<porder[i]<((i*p)/m) is true
+	##Note: No longer stops at the first p-value where the condition is met, but searches 
+	##until the end.
+
+	if(porder[i]<((i*p)/m)){
+	max<-i
+	}
+
+}
+
+#Plot the ordered p-values
+plot(porder,main=title,ylab="P-Values")
+
+#Plot the interesting p-values and color red. Draw a rejection threshold line.
+points(porder[0:max],col="red")
+abline(h=p,col="blue")
+text(4000,p+.02,"Uncorrected Rejection Threshold",col="blue")
+
+##Set to max+1 so that the last p-value is included. Otherwise it is left out.
+rejectedpvec<-porder[0:max+1]
+
+
+print(paste0("Number of Interesting p-values is ", length(rejectedpvec)))
+list(rejected=rejectedpvec)
+
+}
+
+

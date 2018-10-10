@@ -1,0 +1,440 @@
+library(ISLR)
+Warning message:
+package ‘ISLR’ was built under R version 3.4.2 
+
+
+#Get the data frame
+
+NC60<-NCI60$data
+
+#Seperate the data into different cancer groups
+CNS<-NC60[c(1,2,3,6,7),]
+RENAL<-NC60[c(4,11,12,13,14,15,16,17,20),]
+BREAST<-NC60[c(5,8,18,50,52,57,58),]
+NSCLC<-NC60[c(9,10,19,31,32,33,53,54,55),]
+UNKNOWN<-NC60[21,]
+OVARIAN<-NC60[c(22,25,26,27,28,29),]
+MELANOMA<-NC60[c(23,56,59,60,61,62,63,64),]
+PROSTATE<-NC60[c(24,30),]
+KB<-NC60[c(35,36),]
+LEUKEMIA<-NC60[c(34,37,38,39,40,41),]
+COLON<-NC60[c(42,43,44,45,46,47,48),]
+MCA<-NC60[c(49,51),]
+
+
+#Get CNS p-values
+
+CNSxbar<-apply(CNS,2,mean)
+CNSsd<-apply(CNS,2,sd)
+CNStval<-CNSxbar/(CNSsd/sqrt(5))
+#Get lower and upper tests
+CNSpveclower<-pt(CNStval,df=4)
+CNSpvecupper<-pt(CNStval,df=4,lower.tail=FALSE)
+
+CNSlower<-fdr(CNSpveclower,.20,title="CNS Lower Tailed Test")$rejected   #Produces 12 significant p-values
+[1] "Number of Interesting p-values is 12"
+CNSupper<-fdr(CNSpvecupper,.20,title="CNS Upper Tailed Test")$rejected   #Produces 12 significant p-values
+[1] "Number of Interesting p-values is 12"
+
+
+#Get Renal p-values
+
+RENALxbar<-apply(RENAL,2,mean)
+RENALsd<-apply(RENAL,2,sd)
+RENALtval<-RENALxbar/(RENALsd/sqrt(9))
+RENALpveclower<-pt(RENALtval,df=8)
+RENALpvecupper<-pt(RENALtval,df=8,lower.tail=FALSE)
+
+RENALlower<-fdr(RENALpveclower,.15,title="Renal Lower Tailed Test")$rejected   #Produces 74 significant p-values
+[1] "Number of Interesting p-values is 74"
+RENALupper<-fdr(RENALpvecupper,.03,title="Renal Upper Tailed Test")$rejected   #Produces 82 significant p-values
+[1] "Number of Interesting p-values is 82"
+
+
+#Get Breast p-values
+
+BREASTxbar<-apply(BREAST,2,mean)
+BREASTsd<-apply(BREAST,2,sd)
+BREASTtval<-BREASTxbar/(BREASTsd/sqrt(7))
+BREASTpveclower<-pt(BREASTtval,df=6)
+BREASTpvecupper<-pt(BREASTtval,df=6,lower.tail=FALSE)
+
+BREASTlower<-fdr(BREASTpveclower,.20,title="Breast Lower Tailed Test")$rejected    #Produces no significant p-values
+[1] "Number of Interesting p-values is 0"
+
+BREASTupper<-fdr(BREASTpvecupper,.20,title="Breast Upper Tailed Test")$rejected    #Produces 2 significant p-values
+[1] "Number of Interesting p-values is 2"
+
+
+#Get NSCLC p-values
+
+NSCLCxbar<-apply(NSCLC,2,mean)
+NSCLCsd<-apply(NSCLC,2,sd)
+NSCLCtval<-NSCLCxbar/(NSCLCsd/sqrt(9))
+NSCLCpveclower<-pt(NSCLCtval,df=8)
+NSCLCpvecupper<-pt(NSCLCtval,df=8,lower.tail=FALSE)
+
+NSCLClower<-fdr(NSCLCpveclower,.20,title="NSCLC Lower Tailed Test")$rejected      #Produces 2 significant p-values
+[1] "Rejection Threshold is 2.0029928802304e-05"
+[1] "Number of Interesting p-values is 2"
+
+NSCLCupper<-fdr(NSCLCpvecupper,.20,title="NSCLC Upper Tailed Test")$rejected      #Produces 1 significant p-value
+[1] "Rejection Threshold is 2.30357892013646e-06"
+[1] "Number of Interesting p-values is 1"
+
+
+#Get Unknown p-values
+
+UNKNOWNsd<-sd(UNKNOWN)
+UNKNOWNtval<-UNKNOWN/(UNKNOWNsd/sqrt(1))
+UNKNOWNpveclower<-pt(UNKNOWNtval,df=1)
+UNKNOWNpvecupper<-pt(UNKNOWNtval,df=1,lower.tail=FALSE)
+
+#Get Ovarian p-values
+
+OVARIANxbar<-apply(OVARIAN,2,mean)
+OVARIANsd<-apply(OVARIAN,2,sd)
+OVARIANtval<-OVARIANxbar/(OVARIANsd/sqrt(6))
+OVARIANpveclower<-pt(OVARIANtval,df=5)
+OVARIANpvecupper<-pt(OVARIANtval,df=5,lower.tail=FALSE)
+
+OVARIANlower<-fdr(OVARIANpveclower,.20,title="Ovarian Lower Tailed Test")$rejected     #Produces no significant p-values
+[1] "Number of Interesting p-values is 0"
+
+OVARIANupper<-fdr(OVARIANpvecupper,.20,title="Ovarian Upper Tailed Test")$rejected     #Produces no significant p-values
+[1] "Number of Interesting p-values is 0"
+
+
+#Get Melanoma p-values
+
+MELANOMAxbar<-apply(MELANOMA,2,mean)
+MELANOMAsd<-apply(MELANOMA,2,sd)
+MELANOMAtval<-MELANOMAxbar/(MELANOMAsd/sqrt(8))
+MELANOMApveclower<-pt(MELANOMAtval,df=7)
+MELANOMApvecupper<-pt(MELANOMAtval,df=7,lower.tail=FALSE)
+
+MELANOMAlower<-fdr(MELANOMApveclower,.05,title="Melanoma Lower Tailed Test")$rejected    #Produces 68 significant p-values
+[1] "Number of Interesting p-values is 68"
+
+MELANOMAupper<-fdr(MELANOMApvecupper,.05,title="Melanoma Upper Tailed Test")$rejected    #Produces 150 significant p-values
+[1] "Number of Interesting p-values is 150"
+
+
+#Get Prostate p-values
+
+PROSTATExbar<-apply(PROSTATE,2,mean)
+PROSTATEsd<-apply(PROSTATE,2,sd)
+PROSTATEtval<-PROSTATExbar/(PROSTATEsd/sqrt(2))
+PROSTATEpveclower<-pt(PROSTATEtval,df=1)
+PROSTATEpvecupper<-pt(PROSTATEtval,df=1,lower.tail=FALSE)
+
+PROSTATElower<-fdr(PROSTATEpveclower,.20,title="Prostate Lower Tailed Test")$rejected     #Prodcues 15 significant p-values
+[1] "Number of Interesting p-values is 15"
+
+PROSTATEupper<-fdr(PROSTATEpvecupper,.20,title="Prostate Upper Tailed Test")$rejected     #Produces 13 significant p-values
+[1] "Number of Interesting p-values is 13"
+
+#Get KB p-values
+
+KBxbar<-apply(KB,2,mean)
+KBsd<-apply(KB,2,sd)
+KBtval<-KBxbar/(KBsd/sqrt(2))
+KBpveclower<-pt(KBtval,df=1)
+KBpvecupper<-pt(KBtval,df=1,lower.tail=FALSE)
+
+KBlower<-fdr(KBpveclower,.05,title="K562 Lower Tailed Test")$rejected     #Produces 42 significant p-values
+[1] "Number of Interesting p-values is 42"
+
+KBupper<-fdr(KBpvecupper,.05,title="K562 Upper Tailed Test")$rejected     #Produces 46 significant p-values
+[1] "Number of Interesting p-values is 46"
+
+
+#Get LEUKEMIA p-values
+
+LEUKEMIAxbar<-apply(LEUKEMIA,2,mean)
+LEUKEMIAsd<-apply(LEUKEMIA,2,sd)
+LEUKEMIAtval<-LEUKEMIAxbar/(LEUKEMIAsd/sqrt(6))
+LEUKEMIApveclower<-pt(LEUKEMIAtval,df=5)
+LEUKEMIApvecupper<-pt(LEUKEMIAtval,df=5,lower.tail=FALSE)
+
+LEUKEMIAlower<-fdr(LEUKEMIApveclower,.05,title="Leukemia Lower Tailed Test")$rejected     #Produces 110 significant p-values
+[1] "Number of Interesting p-values is 110"
+
+LEUKEMIAupper<-fdr(LEUKEMIApvecupper,.075,title="Leukemia Upper Tailed Test")$rejected     #Produces 71 significant p-values
+[1] "Number of Interesting p-values is 71"
+
+
+#Get COLON p-values
+
+COLONxbar<-apply(COLON,2,mean)
+COLONsd<-apply(COLON,2,sd)
+COLONtval<-COLONxbar/(COLONsd/sqrt(7))
+COLONpveclower<-pt(COLONtval,df=6)
+COLONpvecupper<-pt(COLONtval,df=6,lower.tail=FALSE)
+
+COLONlower<-fdr(COLONpveclower,.05,title="Colon Lower Tailed Test")$rejected     #Produces 60 significant p-values
+[1] "Number of Interesting p-values is 60"
+
+COLONupper<-fdr(COLONpvecupper,.05,title="Colon Upper Tailed Test")$rejected     #Produces 57 significant p-values
+[1] "Number of Interesting p-values is 57"
+
+
+#Get MCA p-values
+
+MCAxbar<-apply(MCA,2,mean)
+MCAsd<-apply(MCA,2,sd)
+MCAtval<-MCAxbar/(MCAsd/sqrt(2))
+MCApveclower<-pt(MCAtval,df=1)
+MCApvecupper<-pt(MCAtval,df=1,lower.tail=FALSE)
+
+MCAlower<-fdr(MCApveclower,.05,title="MCF7 Lower Tailed Test")$rejected      #Produces 31 significant p-values
+[1] "Number of Interesting p-values is 31"
+
+MCAupper<-fdr(MCApvecupper,.05,title="MCF7 Upper Tailed Test")$rejected      #Produces 53 significant p-values
+[1] "Number of Interesting p-values is 53"
+
+
+######### Now that we have created vectors to hold all the significant p-values for each cancer's
+######### lower and upper tailed tests. It's time to see if there are any repeating genes.
+######### Below is an easy reference chart to keep track of the created vectors
+
+Lower Tailed Tests
+Cancer - # of Significant Genes
+
+CNSlower - 12
+RENALlower - 74
+BREASTlower - 0
+NSCLClower - 2
+OVARIANlower - 0
+MELANOMAlower - 68
+PROSTATElower - 15
+LEUKEMIAlower - 110
+COLONlower - 60
+KBlower - 42
+MCAlower - 31
+
+Upper Tailed Tests
+Cancer - # of Significant Genes
+
+CNSupper - 12
+RENALupper - 82
+BREASTupper- 2
+NSCLCupper - 1
+OVARIANupper - 0
+MELANOMAupper - 150
+PROSTATEupper - 13
+LEUKEMIAupper - 71
+COLONupper - 57
+KBupper - 46
+MCAupper - 53
+
+##Checking for any common genes between lower tailed tests
+##Using name attributes to get the names of the genes, because we want to compare gene names
+##not p-values
+
+#No genes in lower tailed Renal cancer appear in any other cancer
+
+intersect(names(RENALlower),names(NSCLClower))
+character(0)
+intersect(names(RENALlower),names(MELANOMAlower))
+character(0)
+intersect(names(RENALlower),names(PROSTATElower))
+character(0)
+intersect(names(RENALlower),names(LEUKEMIAlower))
+character(0)
+intersect(names(RENALlower),names(COLONlower))
+character(0)
+intersect(names(RENALlower),names(KBlower))
+character(0)
+intersect(names(RENALlower),names(MCAlower))
+character(0)
+
+
+#No genes in lower tailed NSCLC cancer appear in any other cancer
+
+intersect(names(NSCLClower),names(MELANOMAlower))
+character(0)
+intersect(names(NSCLClower),names(PROSTATElower))
+character(0)
+intersect(names(NSCLClower),names(LEUKEMIAlower))
+character(0)
+intersect(names(NSCLClower),names(COLONlower))
+character(0)
+intersect(names(NSCLClower),names(KBlower))
+character(0)
+intersect(names(NSCLClower),names(MCAlower))
+character(0)
+
+#Gene 6369 appears in Melanoma, KB and Leukemia
+
+intersect(names(MELANOMAlower),names(PROSTATElower))
+character(0)
+intersect(names(MELANOMAlower),names(LEUKEMIAlower))
+[1] "6369"
+intersect(names(MELANOMAlower),names(COLONlower))
+character(0)
+intersect(names(MELANOMAlower),names(KBlower))
+[1] "6369"
+intersect(names(MELANOMAlower),names(MCAlower))
+character(0)
+
+
+#No genes in lower tailed Prostate cancer appear in any other cancer
+
+intersect(names(PROSTATElower),names(LEUKEMIAlower))
+character(0)
+intersect(names(PROSTATElower),names(COLONlower))
+intersect(names(PROSTATElower),names(KBlower))
+character(0)
+intersect(names(PROSTATElower),names(MCAlower))
+character(0)
+
+
+#Gene 6431, 5956, 5961 appears in both Leukemia and Colon cancer lower tailed tests.
+#Genes 6071 appears in both Leukemia and KB lower tailed tests
+
+intersect(names(LEUKEMIAlower),names(COLONlower))
+[1] "6431" "5956" "5961"
+intersect(names(LEUKEMIAlower),names(KBlower))
+[1] "6369" "6071"
+intersect(names(LEUKEMIAlower),names(MCAlower))
+character(0)
+
+#No genes between KB and MCA cancer lower tailed tests
+intersect(names(KBlower),names(MCAlower))
+character(0)
+
+
+
+
+##Checking for common genes in upper tailed tests
+
+#Check CNS upper against all other cancers
+##5804 appears in CNS, Renal and Melanoma
+##5977 appears in CNS and Renal
+
+intersect(names(CNSupper),names(RENALupper))
+[1] "5977" "5804"
+intersect(names(CNSupper),names(BREASTupper))
+character(0)
+intersect(names(CNSupper),names(NSCLCupper))
+character(0)
+intersect(names(CNSupper),names(OVARIANupper))
+NULL
+intersect(names(CNSupper),names(MELANOMAupper))
+[1] "5804"
+intersect(names(CNSupper),names(PROSTATEupper))
+character(0)
+intersect(names(CNSupper),names(LEUKEMIAupper))
+character(0)
+intersect(names(CNSupper),names(COLONupper))
+character(0)
+intersect(names(CNSupper),names(KBupper))
+character(0)
+intersect(names(CNSupper),names(MCAupper))
+character(0)
+
+#Check Renal upper against all other cancers
+##5804 appears in CNS, Renal and Melanoma
+##282 appears in Renal and Colon
+
+intersect(names(RENALupper),names(BREASTupper))
+character(0)
+intersect(names(RENALupper),names(NSCLCupper))
+character(0)
+intersect(names(RENALupper),names(MELANOMAupper))
+[1] "5804""5805"
+intersect(names(RENALupper),names(PROSTATEupper))
+character(0)
+intersect(names(RENALupper),names(LEUKEMIAupper))
+character(0)
+intersect(names(RENALupper),names(COLONupper))
+[1] "282"
+intersect(names(RENALupper),names(KBupper))
+character(0)
+intersect(names(RENALupper),names(MCAupper))
+character(0)
+
+#No common genes between Breast and any other cancer
+
+intersect(names(BREASTupper),names(NSCLCupper))
+character(0)
+intersect(names(BREASTupper),names(MELANOMAupper))
+character(0)
+intersect(names(BREASTupper),names(PROSTATEupper))
+character(0)
+intersect(names(BREASTupper),names(LEUKEMIAupper))
+character(0)
+intersect(names(BREASTupper),names(COLONupper))
+character(0)
+intersect(names(BREASTupper),names(KBupper))
+character(0)
+intersect(names(BREASTupper),names(MCAupper))
+character(0)
+
+#No common genes between NSCLC and any other cancer
+
+intersect(names(NSCLCupper),names(MELANOMAupper))
+character(0)
+intersect(names(NSCLCupper),names(PROSTATEupper))
+character(0)
+intersect(names(NSCLCupper),names(LEUKEMIAupper))
+character(0)
+intersect(names(NSCLCupper),names(COLONupper))
+character(0)
+intersect(names(NSCLCupper),names(KBupper))
+character(0)
+intersect(names(NSCLCupper),names(MCAupper))
+character(0)
+
+
+
+#4236  between Melanoma and KB
+
+intersect(names(MELANOMAupper),names(PROSTATEupper))
+intersect(names(MELANOMAupper),names(LEUKEMIAupper))
+[1] "5356"
+intersect(names(MELANOMAupper),names(COLONupper))
+character(0)
+intersect(names(MELANOMAupper),names(KBupper))
+[1] "4236" "3107" "4321"
+intersect(names(MELANOMAupper),names(MCAupper))
+
+
+#Gene 2936 common between Leukemia and KBupper
+
+intersect(names(LEUKEMIAupper),names(COLONupper))
+character(0)
+intersect(names(LEUKEMIAupper),names(KBupper))
+[1] "2936"
+intersect(names(LEUKEMIAupper),names(MCAupper))
+character(0)
+
+#Several common genes between Colon and remaining cancers
+#1788 between Colon and KB
+#261 between Colon and MCA
+
+intersect(names(COLONupper),names(KBupper))
+[1] "1788"
+intersect(names(COLONupper),names(MCAupper))
+[1] "256" "261"
+
+
+#923 common between KB and MCA
+intersect(names(KBupper),names(MCAupper))
+[1] "923"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
